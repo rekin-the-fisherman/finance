@@ -2,21 +2,23 @@ import pandas as pd
 import numpy as np
 from sqlalchemy import create_engine
 
-dbConnectionString = "mysql+pymysql://root:@localhost:3306/project_finance"
-engine = create_engine(dbConnectionString)
+def calculate_metrics(ticker):
 
-existingData = pd.read_sql("SELECT * FROM stock_prices WHERE ticker = 'AAPL' ORDER BY date ASC", engine)
+    dbConnectionString = "mysql+pymysql://root:@localhost:3306/project_finance"
+    engine = create_engine(dbConnectionString)
 
-existingData['previous_close'] = existingData['close'].shift(1)
-existingData["daily_return"] = (existingData["close"] - existingData["previous_close"]) / existingData["previous_close"] * 100 
-volatility = existingData['daily_return'].std()
-annualized_volatility = volatility * np.sqrt(252)
-mean = existingData['daily_return'].mean()
-annualized_mean = mean * 252
-var = existingData["daily_return"].quantile(0.05)
-sharpe_ratio = (annualized_mean - 4) / annualized_volatility
+    existingData = pd.read_sql(f"SELECT * FROM stock_prices WHERE ticker = '{ticker}' ORDER BY date ASC", engine)
 
-print(annualized_mean)
-print(annualized_volatility)
-print(sharpe_ratio)
-print(var)
+    if existingData.empty:
+        return {"error": f"No data found for ticker {ticker}"}
+
+    existingData['previous_close'] = existingData['close'].shift(1)
+    existingData["daily_return"] = (existingData["close"] - existingData["previous_close"]) / existingData["previous_close"] * 100 
+    volatility = existingData['daily_return'].std()
+    annualized_volatility = volatility * np.sqrt(252)
+    mean = existingData['daily_return'].mean()
+    annualized_mean = mean * 252
+    var = existingData["daily_return"].quantile(0.05)
+    sharpe_ratio = (annualized_mean - 4) / annualized_volatility
+
+    return {"sharpe_ratio" : sharpe_ratio, "var": var, "annualized_mean": annualized_mean, "annualized_volatility": annualized_volatility}
