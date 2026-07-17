@@ -9,7 +9,7 @@ engine = create_engine(dbConnectionString)
 existingDates = pd.read_sql("SELECT date FROM stock_prices WHERE ticker = 'AAPL'", engine)
 
 
-data = yf.download('AAPL')
+data = yf.download('AAPL', period="1y")
 
 data.columns = data.columns.droplevel(1)
 
