@@ -10,11 +10,13 @@ existingData = pd.read_sql("SELECT * FROM stock_prices WHERE ticker = 'AAPL' ORD
 existingData['previous_close'] = existingData['close'].shift(1)
 existingData["daily_return"] = (existingData["close"] - existingData["previous_close"]) / existingData["previous_close"] * 100 
 volatility = existingData['daily_return'].std()
+annualized_volatility = volatility * np.sqrt(252)
 mean = existingData['daily_return'].mean()
 annualized_mean = mean * 252
-annualized_volatility = volatility * np.sqrt(252)
+var = existingData["daily_return"].quantile(0.05)
 sharpe_ratio = (annualized_mean - 4) / annualized_volatility
 
 print(annualized_mean)
 print(annualized_volatility)
 print(sharpe_ratio)
+print(var)
