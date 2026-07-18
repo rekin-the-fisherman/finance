@@ -4,7 +4,7 @@ from sqlalchemy import create_engine
 
 def calculate_metrics(ticker):
 
-    dbConnectionString = "mysql+pymysql://root:@localhost:3306/project_finance"
+    dbConnectionString = "mysql+pymysql://sql12833331:kwJsbGcMYE@sql12.freesqldatabase.com:3306/sql12833331"
     engine = create_engine(dbConnectionString)
 
     existingData = pd.read_sql(f"SELECT * FROM stock_prices WHERE ticker = '{ticker}' ORDER BY date ASC", engine)
