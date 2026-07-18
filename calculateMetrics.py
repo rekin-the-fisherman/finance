@@ -1,10 +1,14 @@
 import pandas as pd
 import numpy as np
+import os
 from sqlalchemy import create_engine
+from dotenv import load_dotenv
+
+load_dotenv()
 
 def calculate_metrics(ticker):
 
-    dbConnectionString = "mysql+pymysql://sql12833331:kwJsbGcMYE@sql12.freesqldatabase.com:3306/sql12833331"
+    dbConnectionString = os.getenv("DB_CONNECTION_STRING")
     engine = create_engine(dbConnectionString)
 
     existingData = pd.read_sql(f"SELECT * FROM stock_prices WHERE ticker = '{ticker}' ORDER BY date ASC", engine)

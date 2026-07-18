@@ -1,8 +1,14 @@
 import yfinance as yf
 import pandas as pd
+import os
 from sqlalchemy import create_engine
+from dotenv import load_dotenv
 
-dbConnectionString = "mysql+pymysql://root:@localhost:3306/project_finance"
+load_dotenv()
+
+
+
+dbConnectionString = os.getenv("DB_CONNECTION_STRING")
 engine = create_engine(dbConnectionString)
 
 
