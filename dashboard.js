@@ -1,7 +1,7 @@
 
 function getMetrics() {
     const ticker = document.getElementById("tickerInput").value;
-    fetch(`http://127.0.0.1:8000/metrics/${ticker}`)
+    fetch(`https://project-finance-api.onrender.com/metrics/${ticker}`)
     
         .then(response => response.json())
         .then(data => {
